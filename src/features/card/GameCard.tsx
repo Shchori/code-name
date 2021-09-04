@@ -10,8 +10,8 @@ import CivilianGroup1 from './../../images/civilian-type1.png'
 import CivilianGroup2 from './../../images/civilian-type2.png'
 import BlackGroup from './../../images/black-group.png'
 import styled from "@emotion/styled";
-import {Dialog, IconButton} from "@material-ui/core";
-import {Clear} from '@material-ui/icons';
+import {Button, Dialog, IconButton} from "@material-ui/core";
+import {Clear, DeleteForever} from '@material-ui/icons';
 
 
 interface GameCardProps {
@@ -22,7 +22,7 @@ function getRandomElement<Type>(arr: Type[]): Type {
     return arr[Math.floor(Math.random() * arr.length)];
 }
 
-const avatar = css`width:16rem;height:12rem;border-radius: 5rem;`;
+const avatar = css`width:21vh;height:14vh;border-radius: 3vh;`;
 const civilianGroupImages = [CivilianGroup1, CivilianGroup2];
 const redGroupImages = [RedGroup1, RedGroup2];
 const blueGroupImages = [BlueGroup1, BlueGroup2];
@@ -43,57 +43,63 @@ export const GameCard = ({word}: GameCardProps) => {
         setCardShowSelectionModal(!showCardSelectionModal)
     }
 
-    const onClearClick = (e: any) => {
-        e.stopPropagation();
-        setCardType(CardType.None);
-    }
-
     return <div css={css`
         cursor: pointer;
         position:relative;
-        width: 16rem;
-        height: 10rem;`} onClick={toggleShowModal}>
+        width: 12vw;
+        height: 15vh;
+        `} onClick={toggleShowModal}>
         {showCardSelectionModal &&
-        <CardSelectionModal show={showCardSelectionModal} onClose={toggleShowModal} setCardType={setCardType}/>}
+        <CardSelectionModal word={word} show={showCardSelectionModal} onClose={toggleShowModal} setCardType={setCardType}/>}
         <WordCard word={word}/>
-        {cardType != CardType.None && getCoverCard(cardType)}
-        {cardType != CardType.None &&
-        <Clear onClick={onClearClick} css={css`position:absolute;left: 14.5rem;cursor: pointer;`}/>
+        {cardType != CardType.None && <>
+            {getCoverCard(cardType)}
+            <p css={css`
+                color: white;
+                position: absolute;
+                bottom: -1vh;
+                right: 1vw;
+                font-size: 2.5vh;
+                font-weight: bold;
+                text-shadow: 0 0 black;
+            `}>{word}</p>
+        </>
         }
     </div>
 }
 
-const CardSelectionModal = ({show, onClose, setCardType}: { show: boolean, onClose: any, setCardType: any }) => {
+const CardSelectionModal = ({word, show, onClose, setCardType}: { word:string, show: boolean, onClose: any, setCardType: any }) => {
     return <Dialog
         open={show}
         onClose={onClose}
     >
-        <p css={css`   
-        margin: 1rem;
+        <p css={css`
+        margin:1vw;
         user-select: none;
         text-align: center;
-        font-size: 2rem;
+        font-size: 4vh;
         font-weight: 600;
-        `}>בחר סוכן</p>
+        `}>{word}</p>
+        <DeleteForever onClick={setCardType(CardType.None)} css={css`position:absolute;width:7vh;cursor: pointer;`}/>
         <div css={css`
             display: flex;
             flex-wrap: wrap;
             align-items: center;
             justify-content: center;
-            width: 35rem;
+            width: 29vw;
         }`}>
-            <IconButton onClick={() => setCardType(CardType.Blue)}>
+            <Button onClick={() => setCardType(CardType.Blue)}>
                 <img src={getRandomElement(blueGroupImages)} css={avatar}/>
-            </IconButton>
-            <IconButton onClick={() => setCardType(CardType.Red)}>
+            </Button>
+            <Button onClick={() => setCardType(CardType.Red)}>
                 <img src={getRandomElement(redGroupImages)} css={avatar}/>
-            </IconButton>
-            <IconButton onClick={() => setCardType(CardType.Civilian)}>
+            </Button>
+            <Button onClick={() => setCardType(CardType.Civilian)}>
                 <img src={getRandomElement(civilianGroupImages)} css={avatar}/>
-            </IconButton>
-            <IconButton onClick={() => setCardType(CardType.Black)}>
+            </Button>
+            <Button onClick={() => setCardType(CardType.Black)}>
                 <img src={BlackGroup} css={avatar}/>
-            </IconButton>
+            </Button>
         </div>
     </Dialog>
 }
@@ -110,8 +116,8 @@ const WordCardContainer = styled.div`
     background-position: center; 
     background-repeat: no-repeat; 
     background-size: contain;
-    width: 15rem;
-    height: 10rem;
+    width: 12vw;
+    height: 15vh;
 `
 
 const getCoverCard = (type: CardType) => {
@@ -135,15 +141,16 @@ const getCoverCard = (type: CardType) => {
         background-position: center; 
         background-repeat: no-repeat; 
         background-size: contain;
-        width: 13rem;
-        height: 9rem;
+        width: 12vw;
+        height: 15vh;
     `}/>
 }
 
 
 const WordText = styled.p`
-    position: relative;
-    top: 4.8rem;
-    user-select: none;
+    font-size:2.5vh;
     font-weight: bold;
+    position: relative;
+    top: 36%;
+    user-select: none;
 `;

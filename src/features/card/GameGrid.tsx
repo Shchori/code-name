@@ -3,7 +3,16 @@ import {GameCard} from "./GameCard";
 import React, {useState} from "react";
 import words from "./../../app/wordsData.json";
 import {css} from "@emotion/react";
-import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@material-ui/core";
+import {
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    IconButton
+} from "@material-ui/core";
+import {Autorenew, DeleteForever} from "@material-ui/icons";
 
 export function CardsGrid() {
     const getRandomArrayList = () => [...words.sort(function (a, b) {
@@ -40,9 +49,9 @@ export function CardsGrid() {
             <table>
                 {Array.from(Array(5), (e, i) => getTableRow(i))}
             </table>
-            <Button variant="contained" color="primary" onClick={toggleShowResetDialog}>
-                משחק חדש
-            </Button>
+            <IconButton onClick={toggleShowResetDialog}>
+                <Autorenew css={css`position:absolute;width:10vh;cursor: pointer;top:1vh;color:white;`}/>
+            </IconButton>
             {showResetDialog &&
             <ResetDialog open={showResetDialog} handleClose={toggleShowResetDialog} handleAgree={resetGame}/>}
         </div>
@@ -54,7 +63,7 @@ const ResetDialog = ({open, handleClose, handleAgree}: { open: boolean, handleCl
         open={open}
         onClose={handleClose}
     >
-        <DialogTitle>{"האם ברצונך להתחיל משחק חדש?"}</DialogTitle>
+        <DialogTitle>{"התחל משחק חדש"}</DialogTitle>
         <DialogActions>
             <Button onClick={handleClose} color="primary">
                 ביטול
