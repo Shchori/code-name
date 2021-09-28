@@ -15,7 +15,8 @@ import {
 import {Autorenew, DeleteForever} from "@material-ui/icons";
 
 export function CardsGrid() {
-    const getRandomArrayList = () => [...words.sort(function (a, b) {
+    const uniqueWords = Array.from(new Set(words));
+    const getRandomArrayList = () => [...uniqueWords.sort(function (a, b) {
         return 0.5 - Math.random()
     })].slice(0, 25)
     const [wordsList, setWordsList] = useState(getRandomArrayList())
