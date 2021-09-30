@@ -15,11 +15,13 @@ import {
 import {Autorenew, DeleteForever} from "@material-ui/icons";
 
 export function CardsGrid() {
+
     const uniqueWords = Array.from(new Set(words));
     const getRandomArrayList = () => [...uniqueWords.sort(function (a, b) {
         return 0.5 - Math.random()
     })].slice(0, 25)
-    const [wordsList, setWordsList] = useState(getRandomArrayList())
+    const [wordsList, setWordsList] = useState(currentState() || getRandomArrayList())
+    saveState(wordsList);
     const [showResetDialog, setShowResetDialog] = useState(false)
 
     const toggleShowResetDialog = () => setShowResetDialog(!showResetDialog)
@@ -57,6 +59,27 @@ export function CardsGrid() {
             <ResetDialog open={showResetDialog} handleClose={toggleShowResetDialog} handleAgree={resetGame}/>}
         </div>
     );
+}
+
+function currentState(){
+    try {
+        const serializedState = localStorage.getItem('words');
+        if (serializedState === null) {
+          return undefined;
+        }
+        return JSON.parse(serializedState);
+      } catch (err) {
+        return undefined;
+      }
+}
+
+function saveState(wordsList: Array<String>){
+    try {
+        const serializedState = JSON.stringify(wordsList);
+        localStorage.setItem('words', serializedState);
+      } catch {
+        // ignore write errors
+      }
 }
 
 const ResetDialog = ({open, handleClose, handleAgree}: { open: boolean, handleClose: any, handleAgree: any }) =>
